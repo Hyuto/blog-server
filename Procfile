@@ -1,1 +1,1 @@
-web: gunicorn rock_paper.wsgi --log-file -
+web: gunicorn server.wsgi --log-file -
