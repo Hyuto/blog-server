@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 import re, string, pickle
+from numpy import argmax
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 
@@ -11,7 +12,7 @@ class SAModel:
             open(f"{project_dir}/model/[TRAINED] TF-IDF Vectorizer.pickle", "rb")
         )
         self.model = pickle.load(open(f"{project_dir}/model/[TRAINED] SVM.pickle", "rb"))
-        self.label = {-1: "Negatif", 0: "Netral", 1: "Positif"}
+        self.label = {0: "Negatif", 1: "Netral", 2: "Positif"}
 
         with open("setiment_analisis_corona/kamus/stopwords.txt", "r") as f:
             self.stopwords = f.readline().split()
@@ -38,8 +39,9 @@ class SAModel:
     def analyst(self, words):
         words = [self.preprocessor(words)]
         words = self.vectorizer_tfidf.transform(words)
+        proba = self.model.predict_proba(words)
 
-        return self.label[self.model.predict(words)[0]]
+        return {"class": self.label[argmax(proba).tolist()], "probability": proba.tolist()}
 
 
 class SetimentAnalisisCoronaConfig(AppConfig):

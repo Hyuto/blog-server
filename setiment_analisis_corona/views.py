@@ -9,8 +9,7 @@ class ModelView(APIView):
         if request.method == "POST":
             try:
                 pred = SetimentAnalisisCoronaConfig.model.analyst(request.data["words"])
-                response = {"predicted": pred}
-                return JsonResponse(response)
+                return JsonResponse(pred)
             except:
                 return JsonResponse({"message": "Only POST allowed with 'words' argument"})
         return JsonResponse({"message": "Only POST allowed"})
