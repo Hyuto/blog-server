@@ -41,7 +41,7 @@ class SAModel:
         words = self.vectorizer_tfidf.transform(words)
         proba = self.model.predict_proba(words)
 
-        return {"class": self.label[argmax(proba).tolist()], "probability": proba.tolist()}
+        return {"class": self.label[argmax(proba).tolist()], "probability": proba[0].tolist()}
 
 
 class SetimentAnalisisCoronaConfig(AppConfig):
